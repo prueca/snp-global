@@ -1,3 +1,10 @@
+'''
+This script combines all sheets from all excel files (.xls)
+within a directory into one excel file (.xlsx).
+
+Note: All sheets must have the same column headers.
+'''
+
 import os
 import glob
 import pandas as pd
@@ -6,18 +13,18 @@ all_files = glob.glob(os.path.join(".\\excel", "*.xls"))
 outputFile = ".\\output.xlsx"
 
 try:
-  with pd.ExcelWriter(outputFile, mode="w") as writer:
+  all_sheets = []
 
+  with pd.ExcelWriter(outputFile, mode="w") as writer:
     for file in all_files:
-      # open excel file to get sheet names
       xl = pd.ExcelFile(file)
 
       for sheet_name in xl.sheet_names:
-        # get sheet from excel file by name
-        sheet = pd.read_excel(file, sheet_name=sheet_name)
+        sheet = xl.parse(sheet_name)
+        all_sheets.append(sheet)
 
-        # write to output file
-        sheet.to_excel(writer, sheet_name=sheet_name)
+    combined = pd.concat(all_sheets, ignore_index=True)
+    combined.to_excel(writer, sheet_name="Sheet1", index=False)
 
 except Exception as err:
   print(f"An error occurred: {err}")
