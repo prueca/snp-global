@@ -12,6 +12,9 @@ import pandas as pd
 all_files = glob.glob(os.path.join(r".\excel", "*.xls"))
 outputFile = r".\output.xlsx"
 
+if os.path.exists(outputFile):
+  os.remove(outputFile)
+
 try:
   all_sheets = []
 
@@ -20,14 +23,25 @@ try:
       xl = pd.ExcelFile(file)
 
       for sheet_name in xl.sheet_names:
-        sheet = xl.parse(sheet_name)
+        sheet = xl.parse(sheet_name, header=None)
         all_sheets.append(sheet)
 
     combined = pd.concat(all_sheets, ignore_index=True)
-    combined = combined.dropna(how="all")
-    combined = combined.drop_duplicates()
-    combined = combined.rename(columns=combined.iloc[0])
-    combined = combined.drop(index=1)
+
+    # remove blank rows
+    combined.dropna(how="all", inplace=True)
+
+    # set first row as header
+    combined.rename(columns=combined.iloc[0], inplace=True)
+
+    # get header row
+    header = list(combined.columns)
+
+    for index, row in combined.iterrows():
+      # drop row if same as header
+      if list(row) == header:
+        combined.drop(index, inplace=True)
+
     combined.to_excel(writer, sheet_name="Sheet1", index=False)
 
 except Exception as err:
