@@ -9,13 +9,13 @@ import os
 import glob
 import pandas as pd
 
-all_files = glob.glob(os.path.join(".\\excel", "*.xls"))
-outputFile = ".\\output.xlsx"
+all_files = glob.glob(os.path.join(r".\excel", "*.xls"))
+outputFile = r".\output.xlsx"
 
 try:
   all_sheets = []
 
-  with pd.ExcelWriter(outputFile, mode="w") as writer:
+  with pd.ExcelWriter(outputFile, engine="xlsxwriter") as writer:
     for file in all_files:
       xl = pd.ExcelFile(file)
 
@@ -24,6 +24,10 @@ try:
         all_sheets.append(sheet)
 
     combined = pd.concat(all_sheets, ignore_index=True)
+    combined = combined.dropna(how="all")
+    combined = combined.drop_duplicates()
+    combined = combined.rename(columns=combined.iloc[0])
+    combined = combined.drop(index=1)
     combined.to_excel(writer, sheet_name="Sheet1", index=False)
 
 except Exception as err:
