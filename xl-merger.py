@@ -34,13 +34,8 @@ try:
     # set first row as header
     combined.rename(columns=combined.iloc[0], inplace=True)
 
-    # get header row
-    header = list(combined.columns)
-
-    for index, row in combined.iterrows():
-      # drop row if same as header
-      if list(row) == header:
-        combined.drop(index, inplace=True)
+    # remove duplicates
+    combined.drop_duplicates(inplace=True)
 
     combined.to_excel(writer, sheet_name="Sheet1", index=False)
 
