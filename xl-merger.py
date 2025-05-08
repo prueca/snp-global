@@ -59,7 +59,7 @@ try:
 except Exception as err:
   print(f"An error occurred: {err}")
 
-time.sleep(5)
+
 end_time = datetime.now()
 
 time_difference = end_time - start_time
