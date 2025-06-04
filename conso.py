@@ -2,15 +2,15 @@ import os
 import glob
 import pandas as pd
 
-loc = input("Locate excel files: ")
-# loc = r"~/Documents/excel"
+# loc = input("Locate excel files: ")
+loc = r"~/Documents/excel"
 loc = os.path.expanduser(loc)
 
 all_files = glob.glob(os.path.join(f"{loc}", "*.xls*"))
 
 all = []
-# output = r"./out.xlsx"
-output = os.path.join(f"{loc}", "output.xlsx")
+output = r"./out.xlsx"
+# output = os.path.join(f"{loc}", "output.xlsx")
 
 try:
     with pd.ExcelWriter(output) as writer:
@@ -29,7 +29,7 @@ try:
             is_first = False
 
         combined = pd.concat(all, ignore_index=True)
-        combined.to_excel(writer, sheet_name="Sheet1", index=False)
+        combined.to_excel(writer, sheet_name="Sheet1", index=False, header=None)
 
 except Exception as err:
   print(f"An error occurred: {err}")
