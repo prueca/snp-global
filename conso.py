@@ -2,8 +2,8 @@ import os
 import glob
 import pandas as pd
 
-# loc = input("Locate excel files: ")
-loc = r"~/Documents/excel"
+loc = input("Locate excel files: ")
+# loc = r"~/Documents/excel"
 loc = os.path.expanduser(loc)
 
 all_files = glob.glob(os.path.join(f"{loc}", "*.xls*"))
