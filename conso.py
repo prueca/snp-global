@@ -25,8 +25,8 @@ try:
 
             all.append(xl)
 
-        combined = pd.concat(all, ignore_index=True)
-        combined.to_excel(writer, sheet_name="Sheet1", index=False, header=None)
+        merged = pd.concat(all, ignore_index=True)
+        merged.to_excel(writer, sheet_name="Sheet1", index=False, header=None)
 
 except Exception as err:
   print(f"An error occurred: {err}")
